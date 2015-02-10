@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+
+  <link rel="stylesheet" href="public/css/bootstrap.min.css">
+  <link rel="stylesheet" href="public/css/normalize.css">
+  <link rel="stylesheet" href="public/css/main.css">
+  <title>PinyinType</title>
+</head>
+<body>
+<!--   <div id="toggle-button"><a href="javascript:;" class="button-toggle smaller-english">Toggle Pinyin</a></div>
+  <div> -->
+
+<div class="pull-right" id="toggle-div">
+  <input type="checkbox" onclick='handleClick(this);' id="toggle-button" name="toggle-button"/>
+  <label for="toggle-button"><span style="color:white">l</span></label>
+</div>
+  <!--<div id="definition"><p class="chinese">是</p><p class="smaller-english">English: "is"</p></div>-->
+  <div class='word-container'><form>
+    <p class="chinese" id="chinese-sentence"></p>
+      <p>
+      <label class="english" id='pinyin-sentence'></label><br />
+    <input type="text" id="userText" autocomplete="off" onkeydown="trackPending()" onkeyup="compareSentence()">
+    <div id="block-of-white"></div>
+    <div class="english" id='english-sentence'><p ></p></div>
+    </p>
+  </form></div>
+  <div id="instructions" class="smaller-english"><p></p></div>
+  <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="public/js/bootstrap.min.js"></script>
+  <script src="public/js/bootbox.min.js"></script>
+  <script src="public/js/index.js"></script>
+</body>
