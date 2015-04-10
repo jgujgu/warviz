@@ -1,34 +1,104 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-
   <link rel="stylesheet" href="public/css/bootstrap.min.css">
-  <link rel="stylesheet" href="public/css/normalize.css">
-  <link rel="stylesheet" href="public/css/main.css">
-  <title>PinyinType</title>
+  <link rel="stylesheet" href="public/css/index.css">
+  <title>Gu</title>
 </head>
 <body>
-  <div class="col-md-8">
-    <p>
-      <span id="title"><strong>Pinyin<span class="incorrect">Type </span><span>  </span></strong></span>
-      <input type="checkbox" "pull-right" onclick='handleClick(this);' id="toggle-button" name="toggle-button"/>
-      <label for="toggle-button"><span style="color:white">l</span></label>
-    </p>
+  <div class="image">
+    <img id="android" class="noselect" src="public/images/android_phone.png" alt="android phone"/>
+    <div id="demo" class="noselect">
+      <ul>
+        <li class="first dragend-page">
+          <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <img id="gu-tinder" src="public/images/tinder_purple.png" alt="android phone"/>
+              </div>
+              <div id="title" class="navbar-header">
+                <span>JGuMatch</span>
+              </div>
+            </div>
+          </nav>
+          <div class="circleborder">
+            <img id="prof-pic" src="public/images/ProfPic.jpg" alt="jgu"/>
+          </div>
+          <input type="image" id="no" class="highlightit prev" src="public/images/no.png" />
+          <input type="image" id="yes" class="highlightit next" src="public/images/yes.png" />
+          <div class="info">
+            <h3>Jeffrey Gu</h3>
+            <p>
+              <strong>Location: </strong> Denver, Colorado<br>
+              <strong>About: </strong> You'd better swipe right!
+            </p>
+          </div>
+        </li>
+        <li class="middle dragend-page">
+          <div id="donut" class="text-center"></div>
+          <div id="databases">
+            <div>
+              <h4 class="text-center">
+                <strong>
+                  Database Languages
+                </strong>
+              </h4>
+            </div>
+            <p><strong>SQL</strong></p>
+            <p>SELECT * FROM JeffsHead WHERE lang="SQL";</p>
+            <p><strong>MongoDB</strong></p>
+            <p>db.jeffshead.find({lang: "mongodb"}, {_id: false})</p>
+          </div>
+          <div id="editor">
+            <div>
+              <p>
+                <strong>
+                  DevEnv: tmux, vim -->
+                </strong>
+                <a href="https://github.com/jgu2160/dotfiles/blob/master/vimrc" target="_blank">vimrc</a>
+              </p>
+            </div>
+          </div>
+        </li>
+        <li class="middle_2 dragend-page">
+          <div id="web-examples">
+            <div>
+              <h4 class="text-center">
+                <strong>
+                  Web Examples
+                </strong>
+              </h4>
+              <p>
+                <strong>PinyinType</strong> is the prototype of a Chinese language learning platform.
+                <br><a href="http://www.pinyintype.com" target="_blank">Demo Site</a>
+                | <a href="https://www.youtube.com/watch?v=yw7tz_t46nc" target="_blank">Youtube</a>
+              </p>
+              <p>
+                <strong>Clamorous</strong> was the first major Rails project at the Turing School I completed with a group. Most of the work I did was on the front end. I incorporated an animated d3 bar graph into my group's project, which updates from showing total revenue to total units sold.
+                <br><a href="https://limitless-oasis-8234.herokuapp.com/graph/index" target="_blank">Graph</a>
+                | <a href="https://github.com/loriculberson/dinner_dash" target="_blank">Github</a>
+              </p>
+              <p>
+                <strong>Colorado Water Rights Transactions Map</strong> earned my group (formed the day of) a second place finish at Go Code Colorado's
+                <a href="http://gocode.colorado.gov/events/open-data-jam/" target="_blank">first event</a>
+                of 2015. It showcases all the water rights transactions in the state's history, filtering by year, and links to the documents associated with the specific claim.
+                <br><a href="https://data.colorado.gov/Water/DWR-Water-Right-Transactions/i55n-9sba" target="_blank">Source Data</a>
+                | <a href="https://github.com/oorion/colorado_water_transactions" target="_blank">Github</a>
+              </p>
+            </div>
+          </div>
+        </li>
+        <li class="last dragend-page">
+          <img id="rick" src="public/images/rickroll.gif" alt="rick astley"/>
+          <p id="rick-text">I warned you to swipe right...</p>
+        </li>
+      </ul>
+    </div>
+  <div class="button prev"></div>
+  <div class="button next"></div>
   </div>
-  <div class="col-md-8" id='word-container'>
-    <form>
-      <div style="background-color:green" class="chinese" id="chinese-sentence"><p></p></div>
-      <p>
-        <label style="background-color:blue" class="english" id='pinyin-sentence'></label><br />
-        <input type="text" id="userText" autocomplete="off"">
-        <div id="block-of-white"></div>
-        <div id="cursor-sensor"></div>
-        <div class="english" id='english-sentence'><p ></p></div>
-      </p>
-    </form>
-  </div>
-  <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-  <script src="public/js/bootstrap.min.js"></script>
-  <script src="public/js/bootbox.min.js"></script>
-  <script src="public/js/index.js"></script>
+  <script src="public/js/jquery-1.11.2.min.js"></script>
+  <script src="public/js/d3.min.js"></script>
+  <script src="public/js/dragend.js"></script>
+  <script src="public/js/jgu.js"></script>
 </body>
