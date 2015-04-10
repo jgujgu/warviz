@@ -64,7 +64,7 @@ var svg = d3.select("#donut").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-d3.csv("./data/code.csv", function(error, data) {
+d3.csv("public/js/code.csv", function(error, data) {
 
   data.forEach(function(d) {
     d.comfort = +d.comfort;
