@@ -4,6 +4,10 @@
   border: 0;
 }
 
+#csvdata {
+    display: none;
+}
+
 body {
   background-color: #1F003D;
 }
