@@ -64,14 +64,22 @@ body {
 .prev {
   margin-left: -18.2%;
   border-width: 50px 50px 50px 0;
-  border-color: transparent #333 transparent transparent;
+  border-color: transparent #00a136 transparent transparent;
   user-select: none;
 }
 
 .next {
   margin-left: 14.25%;
   border-width: 50px 0 50px 50px;
-  border-color: transparent transparent transparent #333;
+  border-color: transparent transparent transparent #00a136;
+}
+
+.next:hover {
+  border-color: transparent transparent transparent #93ffb7;
+}
+
+.prev:hover {
+  border-color: transparent #93ffb7 transparent transparent;
 }
 
 #demo li.first {
