@@ -41,72 +41,60 @@ $(document).ready(function() {
 });
 
 var width = 250,
-    height = 250,
-    radius = Math.min(width, height) / 2;
+  height = 250,
+  radius = Math.min(width, height) / 2;
 
 var color = d3.scale.linear()
-    .domain([1, 10])
-    .range(["#93ffb7", "#00a136"]);
+.domain([1, 10])
+.range(["#93ffb7", "#00a136"]);
 
 var arc = d3.svg.arc()
-    .outerRadius(radius)
-    .innerRadius(radius - 52);
+.outerRadius(radius)
+.innerRadius(radius - 52);
 
 var pie = d3.layout.pie()
-    .sort(null)
-    .startAngle(1.1*Math.PI)
-    .endAngle(3.1*Math.PI)
-    .value(function(d) { return d.comfort; });
+.sort(null)
+.startAngle(1.1*Math.PI)
+.endAngle(3.1*Math.PI)
+.value(function(d) { return d.score; });
 
 var svg = d3.select("#donut").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+.attr("width", width)
+.attr("height", height)
+.append("g")
+.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-var raw = d3.select("#csvdata").text();
-var parsed = d3.csv.parse(raw);
+data = [
+  {"lang": "Ruby", "score": 9},
+  {"lang": "Javascript", "score": 6},
+  {"lang": "d3", "score": 2},
+  {"lang": "Go", "score": 2},
+  {"lang": "Android", "score": 3}
+]
 
-d3.csv(parsed, function(error, data) {
+var g = svg.selectAll(".arc")
+.data(pie(data))
+.enter().append("g")
+.attr("class", "arc");
 
-  data.forEach(function(d) {
-    d.comfort = +d.comfort;
-  });
+g.append("path")
+.attr("d", arc)
+.style("fill", function(d) { return color(d.data.score); });
 
-  var g = svg.selectAll(".arc")
-      .data(pie(data))
-    .enter().append("g")
-      .attr("class", "arc");
+g.append("text")
+.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+.attr("dy", ".35em")
+.attr("class", "donut-text")
+.style("text-anchor", "middle")
+.text(function(d) { return d.data.lang; });
 
-  //g.append("path")
-    //.style("fill", function(d) { return color(d.data.comfort); })
-    //.attrTween('d', function(d) {
-         //var i = d3.interpolate(d.startAngle+0.1, d.endAngle);
-         //return function(t) {
-             //d.endAngle = i(t);
-           //return arc(d);
-         //}
-    //});
-
-  g.append("path")
-      .attr("d", arc)
-      .style("fill", function(d) { return color(d.data.comfort); });
-
-  g.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-      .attr("dy", ".35em")
-      .attr("class", "donut-text")
-      .style("text-anchor", "middle")
-      .text(function(d) { return d.data.lang; });
-
-  g.append("text")
-    .style("text-anchor", "middle")
-    .attr("class", "exp")
-    .attr("dy", "-0.5em")
-    .text("Code");
-  g.append("text")
-    .attr("dy", "1.1em")
-    .attr("class", "exp")
-    .style("text-anchor", "middle")
-    .text("Experience");
-});
+g.append("text")
+.style("text-anchor", "middle")
+.attr("class", "exp")
+.attr("dy", "-0.5em")
+.text("Code");
+g.append("text")
+.attr("dy", "1.1em")
+.attr("class", "exp")
+.style("text-anchor", "middle")
+.text("Experience");
