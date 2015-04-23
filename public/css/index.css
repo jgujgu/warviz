@@ -20,6 +20,18 @@ body {
   stroke: #fff;
 }
 
+.red {
+  color: #FF4747;
+}
+
+.yellow {
+  color: #FAD767;
+}
+
+.green {
+  color: #19A347;
+}
+
 .noselect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
