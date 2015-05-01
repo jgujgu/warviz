@@ -50,7 +50,8 @@ var color = d3.scale.linear()
 
 var arc = d3.svg.arc()
 .outerRadius(radius)
-.innerRadius(radius - 52);
+.innerRadius(radius - 52)
+.cornerRadius(4);
 
 var pie = d3.layout.pie()
 .sort(null)
@@ -81,20 +82,30 @@ g.append("path")
 .attr("d", arc)
 .style("fill", function(d) { return color(d.data.score); });
 
-g.append("text")
-.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-.attr("dy", ".35em")
-.attr("class", "donut-text")
-.style("text-anchor", "middle")
-.text(function(d) { return d.data.lang; });
+//g.append("path")
+//.style("fill", function(d) { return color(d.data.score); })
+//.transition().delay(function(d, i) { return i * 2000; }).duration(2000)
+//.attrTween('d', function(d) {
+  //var i = d3.interpolate(d.startAngle, d.endAngle);
+  //return function(t) {
+    //d.startAngle = i(t);
+    //return arc(d);
+  //}});
 
-g.append("text")
-.style("text-anchor", "middle")
-.attr("class", "exp")
-.attr("dy", "-0.5em")
-.text("Code");
-g.append("text")
-.attr("dy", "1.1em")
-.attr("class", "exp")
-.style("text-anchor", "middle")
-.text("Experience");
+  g.append("text")
+  .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+  .attr("dy", ".35em")
+  .attr("class", "donut-text")
+  .style("text-anchor", "middle")
+  .text(function(d) { return d.data.lang; });
+
+  g.append("text")
+  .style("text-anchor", "middle")
+  .attr("class", "exp")
+  .attr("dy", "-0.5em")
+  .text("Code");
+  g.append("text")
+  .attr("dy", "1.1em")
+  .attr("class", "exp")
+  .style("text-anchor", "middle")
+  .text("Experience");
