@@ -51,12 +51,13 @@ var color = d3.scale.linear()
 var arc = d3.svg.arc()
 .outerRadius(radius)
 .innerRadius(radius - 52)
-.cornerRadius(4);
+.cornerRadius(5);
 
 var pie = d3.layout.pie()
 .sort(null)
 .startAngle(1.1*Math.PI)
 .endAngle(3.1*Math.PI)
+.padAngle(.01)
 .value(function(d) { return d.score; });
 
 var svg = d3.select("#donut").append("svg")
