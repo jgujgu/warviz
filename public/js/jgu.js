@@ -67,7 +67,7 @@ var svg = d3.select("#donut").append("svg")
 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 data = [
-  {"lang": "Ruby", "score": 8},
+  {"lang": "Ruby", "score": 7},
   {"lang": "Javascript", "score": 5},
   {"lang": "d3", "score": 2},
   {"lang": "Go", "score": 3},
