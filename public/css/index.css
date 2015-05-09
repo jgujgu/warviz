@@ -9,7 +9,8 @@
 }
 
 body {
-  background-color: #1F003D;
+  background-color: white;
+  font-family: 'Roboto', sans-serif;
 }
 
 .exp {
@@ -76,22 +77,22 @@ body {
 .prev {
   margin-left: -18.2%;
   border-width: 50px 50px 50px 0;
-  border-color: transparent #00a136 transparent transparent;
+  border-color: transparent #E67058 transparent transparent;
   user-select: none;
 }
 
 .next {
   margin-left: 14.25%;
   border-width: 50px 0 50px 50px;
-  border-color: transparent transparent transparent #00a136;
+  border-color: transparent transparent transparent #E67058;
 }
 
 .next:hover {
-  border-color: transparent transparent transparent #93ffb7;
+  border-color: transparent transparent transparent #e15336;
 }
 
 .prev:hover {
-  border-color: transparent #93ffb7 transparent transparent;
+  border-color: transparent #e15336 transparent transparent;
 }
 
 #demo li.first {
