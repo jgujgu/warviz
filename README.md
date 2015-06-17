@@ -1,1 +1,6 @@
-This repo contains my personal website, a fun experiment two javascript libraries. Check it out! www.jeffreygu.com
+# CommitCat
+Displays the frequency of commits by hour in a d3 graph.
+
+Clone the repo, then open index.html. 
+Enter a git username and repo or use the default. 
+Press MEOW.
