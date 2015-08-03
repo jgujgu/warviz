@@ -1,0 +1,12 @@
+# Site settings
+title: JGu[i]
+email: jgu@jeffreygu.com
+description: > # this means to ignore newlines until "baseurl:"
+  JGu[i] provides insight into how I view matters, internet and iTerm.
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://www.jeffreygu.com" # the base hostname & protocol for your site
+twitter_username: Jeffrey_Gu
+github_username:  jgu2160
+
+# Build settings
+markdown: kramdown
