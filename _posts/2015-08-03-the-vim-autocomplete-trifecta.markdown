@@ -11,9 +11,9 @@ Add these lines to your `.vimrc`. I use Vundle.
 
 {% highlight vim %}
 "Vundle begin"
-Plugin 'Shougo/neocomplete.vim’
+Plugin 'Shougo/neocomplete.vim'
 Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets’'
+Plugin 'honza/vim-snippets'
 "Vundle end"
 
 "neocomplete settings
@@ -31,13 +31,13 @@ set wildignore+=tmp/**
 let g:neocomplete#enable_smart_case = 1
 " Set minimum syntax keyword length.
 let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*’
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
 "Ultisnips settings
 let g:UltiSnipsExpandTrigger="<TAB>"
 let g:UltiSnipsListSnippets="<c-TAB>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>”
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 {% endhighlight %}
 
 Next, on OSX, since it comes with Vim 7.3, you will have to upgrade to Vim 7.4 with lua (because of neocomplete). First, move the system Vim to another folder:
@@ -61,13 +61,13 @@ As an example, in any JavaScript file, I will only type `fun` + `TAB` (while in 
 
 {% highlight js %}
 function function_name(argument) {
-
+    body;
 }
 {% endhighlight %}
 
 Using `CTRL-j`, I will jump from `function_name`, `argument`, and finally the blank `body`, foregoing the need to type any parentheses, braces, or tabs.
 
-It is here I'd like to address the concern of typing not being the bottleneck for writing code. **I totally agree it is not the bottleneck.** It addresses another problem. Snippets significantly reduce the annoyance of having to type out syntax, which interrupts my thinking, especially if I have to sift through a mess of incorrectly completed braces and parentheses (which I generally don't have to anymore). A streamlined snippet setup prevents that wasted time, such that more time can be spent on the more interesting parts of programming.
+It is here I'd like to address the concern of typing not being the bottleneck for writing code. **I totally agree it is not the bottleneck.** It addresses another problem. Snippets significantly reduce the annoyance of having to type out syntax, which interrupts my thinking, especially if I have to sift through a mess of incorrectly completed braces and parentheses (which I generally don't have to do anymore). A streamlined snippet setup prevents that wasted time, such that more time can be spent on the more interesting parts of programming.
 
 Finally, vim-snippets provides many great default snippets, but let's say you want to make new snippets or just see which ones come default. Go into the following directory to see the different snippet files in your favorite languages:
 {% highlight js %}
