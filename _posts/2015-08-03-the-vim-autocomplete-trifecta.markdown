@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "The Vim autocomplete trifecta"
-cover: cover.jpg
+cover: stooges.jpg
 date:   2015-08-03 12:24:38
 categories: vim autocomplete neocomplete ultisnips vimsnippets snippets productivity
 ---
@@ -40,6 +40,10 @@ let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 {% endhighlight %}
 
+
+
+
+
 Next, on OSX, since it comes with Vim 7.3, you will have to upgrade to Vim 7.4 with lua (because of neocomplete). First, move the system Vim to another folder:
 {% highlight js %}
 ❯❯❯ mv /usr/bin/vim /usr/bin/vim73
@@ -57,7 +61,7 @@ Finally, since homebrew will probably have not installed Vim into old `usr/bin` 
 
 All of this sets up the minimum settings to use neocomplete and Ultisnips in concert. `CTRL-n` cycles through neocomplete options and `TAB` expands them. `CTRL-j` and `CTRL-k` will cycle through the fields of an Ultisnips snippet, requiring `TAB`, of course, to first expand it. These are the only commands I commonly use.
 
-As an example, in any JavaScript file, I will only type `fun` + `TAB` (while in insert mode) and end up with the following expansion:
+As an example, in any JavaScript file, I will only type `fun + TAB` (while in insert mode) and end up with the following expansion:
 
 {% highlight js %}
 function function_name(argument) {

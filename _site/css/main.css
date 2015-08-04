@@ -110,7 +110,8 @@ a:hover {
 
 #cover-photo-container,
 #info-container {
-  display: block; }
+  display: block;
+  /*margin-top: 25px;*/ }
 
 #info-container {
   margin-top: 3em; }
