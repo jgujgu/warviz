@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Reflections on Turing"
-cover: dc.jpg
+cover: unionstation.jpg
 date:   2015-08-05 13:53:38
 categories: school life javascript ruby rails
 ---
