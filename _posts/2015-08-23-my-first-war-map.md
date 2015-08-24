@@ -287,7 +287,7 @@ var bubbleMap = new Datamap({
         'GBR': '#8c564b',
         'FRA': '#d62728',
         'PAK': '#7f7f7f',
-        defaultFill: '#EDDC4E'
+        defaultFill: '#E7C4AE'
     },
     data: {
         'RUS': {fillKey: 'RUS'},
