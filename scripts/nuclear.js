@@ -1,4 +1,4 @@
-var bombs =     [
+var bombs = [
     {
         name: 'Gerboise Bleue',
         radius: 0,
@@ -47,8 +47,8 @@ var bombs =     [
         fillKey: 'PRK',
         significance: 'First fission plutonium-based device tested by North Korea; likely resulted as a fizzle',
         date: '2006-10-09',
-        latitude: 40.5743,
-        longitude: 129.2012
+        latitude: 41.305,
+        longitude: 129
     }, {
         name: '2009 North Korean nuclear test',
         radius: 0,
@@ -58,7 +58,17 @@ var bombs =     [
         date: '2009-05-25',
         fillKey: 'PRK',
         latitude: 41.306,
-        longitude: 129.029
+        longitude: 130.5
+    }, {
+        name: '2013 North Korean nuclear test',
+        radius: 0,
+        yeild: 9,
+        country: 'North Korea',
+        significance: 'Most recent nuclear test',
+        date: '2013-02-16',
+        fillKey: 'PRK',
+        latitude: 41.306,
+        longitude: 132
     }, {
         name: 'Chagai-I',
         radius: 0,
@@ -214,7 +224,16 @@ var bombs =     [
     }
 ];
 
-//prep the data
+bubbleTemplate = { popupTemplate: function(geo, data) {
+    return [
+        '<div class="hoverinfo"><strong>',data.name,'</strong>',
+        '<br/>Payload: ', data.yeild, ' kilotons',
+        '<br/>Country: ', data.country,
+        '<br/>Date: ', data.date,
+        '<br/>Significance: ', data.significance,
+        '</div>'].join('');
+}};
+
 var yields = bombs.map(function(bomb) {
     return bomb.yeild;
 });
@@ -224,7 +243,7 @@ var max = d3.max(yields);
 
 var scale = d3.scale.pow()
 .domain([min, max])
-.range([10, 45]);
+.range([7, 49]);
 
 bombs.forEach(function(bomb, i) {
     bombs[i].radius = scale(bomb.yeild);
@@ -259,15 +278,5 @@ var bubbleMap = new Datamap({
         'USA': {fillKey: 'USA'}
     }
 });
-
-bubbleTemplate = { popupTemplate: function(geo, data) {
-    return [
-        '<div class="hoverinfo"><strong>',data.name,'</strong>',
-        '<br/>Payload: ', data.yeild, ' kilotons',
-        '<br/>Country: ', data.country,
-        '<br/>Date: ', data.date,
-        '<br/>Significance: ', data.significance,
-        '</div>'].join('');
-}};
 
 bubbleMap.bubbles(bombs, bubbleTemplate);
