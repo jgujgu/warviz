@@ -227,12 +227,16 @@ var bombs = [
 bubbleTemplate = { popupTemplate: function(geo, data) {
     return [
         '<div class="hoverinfo"><strong>',data.name,'</strong>',
-        '<br/>Payload: ', data.yeild, ' kilotons',
+        '<br/>Payload: ', numberWithCommas(data.yeild), ' kilotons',
         '<br/>Country: ', data.country,
         '<br/>Date: ', data.date,
         '<br/>Significance: ', data.significance,
         '</div>'].join('');
 }};
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 var yields = bombs.map(function(bomb) {
     return bomb.yeild;
