@@ -12,7 +12,7 @@ custom_js:
 - datamap
 - nuclear
 ---
-I've been searching for inspiration for a series of D3 graphs I'd like to someday make that center upon one of my favorite subjects, war. I recently happened upon [markmarkoh's bl.ock](http://bl.ocks.org/markmarkoh/4255924), which shows notable nuclear explosions and attending information. I used native javascript instead of backbone/underscore, as I find this easier to reason about. Tsar Bomba was ridiculously big, so it's hard to effectively scale the other circles and still retain their hoverability. We observe North Korea racking up some tests in recent years, though the sample may be biased due to the fact that Wikipedia contributors find them  notable. [Wikipedia](https://en.wikipedia.org/wiki/Nuclear_weapons_testing#Milestone_nuclear_explosions)
+I've been searching for inspiration for a series of D3 graphs I'd like to someday make that center upon one of my favorite subjects, war. I recently happened upon [markmarkoh's bl.ock](http://bl.ocks.org/markmarkoh/4255924), which shows notable nuclear explosions and attending information. I used native javascript instead of backbone/underscore, as I find this easier to reason about. Tsar Bomba was ridiculously big, so it's hard to effectively scale the other circles and still retain their hoverability. We observe North Korea racking up tests in recent years. [Wikipedia](https://en.wikipedia.org/wiki/Nuclear_weapons_testing#Milestone_nuclear_explosions)
 
 {% highlight js %}
 //required html
