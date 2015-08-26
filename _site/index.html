@@ -35,6 +35,13 @@
           <ul class="posts-list">
             
               <li class="post-link">
+                <a class="post-title" href="/d3/wikipedia/most/2015/08/25/the-most.html">
+                  <span class="post-date">25 Aug 2015</span>
+                  The Most
+                </a>
+              </li>
+            
+              <li class="post-link">
                 <a class="post-title" href="/d3/nuclear/bombs/2015/08/23/my-first-war-map.html">
                   <span class="post-date">23 Aug 2015</span>
                   My First War Map
@@ -77,7 +84,7 @@
     
 
     
-      <div id="nuclear" style="height: 500px; width: 750px"></div>
+      <div id="most" style="height: 500px; width: 750px"></div>
     
 
     
@@ -88,312 +95,86 @@
       
         <script src='/scripts/datamap.js' type="text/javascript"></script>
       
-        <script src='/scripts/nuclear.js' type="text/javascript"></script>
+        <script src='/scripts/rawcountries.js' type="text/javascript"></script>
+      
+        <script src='/scripts/most.js' type="text/javascript"></script>
       
     
 
     <div id="info-container">
-      <h1 id="title">My First War Map</h1>
-      <span id="date">23 Aug 2015</span>
+      <h1 id="title">The Most</h1>
+      <span id="date">25 Aug 2015</span>
     </div>
   </div>
 
   <div class="post">
-    <p>I’ve been searching for inspiration for a series of D3 graphs I’d like to someday make that center upon one of my favorite subjects, war. I recently happened upon <a href="http://bl.ocks.org/markmarkoh/4255924">markmarkoh’s bl.ock</a>, which shows notable nuclear explosions and attending information. I used native javascript instead of backbone/underscore, as I find this easier to reason about. Tsar Bomba was ridiculously big, so it’s hard to effectively scale the other circles and still retain their hoverability. We observe North Korea racking up tests in recent years. <a href="https://en.wikipedia.org/wiki/Nuclear_weapons_testing#Milestone_nuclear_explosions">Wikipedia</a></p>
+    <p>I was on the hunt for a cool Wikipedia dataset I could make another informative map with, and I settled on this, a <a href="https://en.wikipedia.org/wiki/List_of_top_international_rankings_by_country">list of top international rankings by country</a>. The color intensities show how relatively many rankings a country had on the list, and hovering provides a list of all the ranking descriptions. Some curiosities: Venezuela makes beauty queens, and South Africa has lots of AIDS. No surprises: Afghanistan is a terrible place to be. Here is the raw country data in <a href="https://docs.google.com/spreadsheets/d/1SkP4xA0-qRK3YQQfkVg5kaMsZtRyhjL9qtOsMTo7SJ4/edit?usp=sharing">spreadsheet form</a>.</p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//required html</span>
-<span class="c1">//&lt;div id=&quot;nuclear&quot; style=&quot;height: 500px; width: 750px&quot;&gt;&lt;/div&gt;</span>
-<span class="c1">//&lt;script src=&#39;/scripts/d3.min.js&#39; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</span>
-<span class="c1">//&lt;script src=&#39;/scripts/topojson.js&#39; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</span>
-<span class="c1">//&lt;script src=&#39;/scripts/datamap.js&#39; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</span>
-<span class="kd">var</span> <span class="nx">bombs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Gerboise Bleue&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">70</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;France&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First fission weapon test by France&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1960-02-13&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;FRA&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="o">-</span><span class="mf">0.325</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">26.1840</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Canopus&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">2600</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;France&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First &quot;staged&quot; thermonuclear test by France&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;FRA&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1968-08-24&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="o">-</span><span class="mf">22.15</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="o">-</span><span class="mf">138.45</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Smiling Buddha&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;India&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First fission nuclear explosive test by India&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;IND&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1974-05-18&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">27.095</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">71.753</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Pokhran-II&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">60</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;India&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;IND&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First potential fusion/boosted weapon test by India; first deployable fission weapon test by India&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1998-05-11&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">27.07884</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">71.72211</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;2006 North Korean nuclear test&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;North Korea&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PRK&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First fission plutonium-based device tested by North Korea; likely resulted as a fizzle&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;2006-10-09&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">41.305</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mi">129</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;2009 North Korean nuclear test&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">15</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;North Korea&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First successful fission device tested by North Korea&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;2009-05-25&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PRK&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">41.306</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">130.5</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;2013 North Korean nuclear test&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">9</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;North Korea&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;Most recent nuclear test&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;2013-02-16&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PRK&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">41.306</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mi">132</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Chagai-I&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">40</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;Pakistan&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First fission weapon (boosted) test by Pakistan&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PAK&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1998-05-28&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">30.12</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">67.01</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Chagai-II&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;Pakistan&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;Second fission weapon (boosted) test by Pakistan&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PAK&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1998-05-30&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">30.22</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">67.11</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;596&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">22</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;PR China&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First fission weapon test by the People\&#39;s Republic of China&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PRC&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1964-10-16&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">42.35</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">88.30</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Test No. 6&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">3300</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;PR China&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PRC&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First &quot;staged&quot; thermonuclear weapon test by the People\&#39;s Republic of China&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1967-06-17&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">40.10</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">90.35</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Hurricane&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">25</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;UK&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First fission weapon test by the UK&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;GBR&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1952-10-03&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="o">-</span><span class="mf">20.25</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">115.33</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Grapple X&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">1800</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;UK&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;GBR&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First (successful) &quot;staged&quot; thermonuclear weapon test by the UK&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1957-11-08&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">1.53</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="o">-</span><span class="mf">157.24</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Trinity&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">19</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First fission device test, first plutonium implosion detonation &#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1945-07-16&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">33.4038</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="o">-</span><span class="mf">106.2831</span>
-    <span class="p">},{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Little Boy&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">13</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;Bombing of Hiroshima, Japan, first detonation of an enriched uranium gun-type device, first use of a nuclear device in military combat.&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1945-08-06&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">34.237</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">132.2719</span>
-    <span class="p">},{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Fat Man&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;Bombing of Nagasaki, Japan, second and last use of a nuclear device in military combat.&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1945-08-09&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">32.4625</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">129.5147</span>
-    <span class="p">},{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Ivy Mike&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">10400</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First cryogenic fusion fuel &quot;staged&quot; thermonuclear weapon, primarily a test device and not weaponized&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1952-11-01&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">11.40</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">162.1113</span>
-    <span class="p">},{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Castle Bravo&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">15000</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First dry fusion fuel &quot;staged&quot; thermonuclear weapon; a serious nuclear fallout accident occurred&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1954-03-01&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">11.415</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">165.1619</span>
-    <span class="p">},{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;RDS-1&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">22</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;USSR&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;RUS&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First fission weapon test by the USSR&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1949-08-29&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">50.2615</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">77.4851</span>
-    <span class="p">},{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Joe 4&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">400</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;USSR&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;RUS&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First fusion weapon test by the USSR (not &quot;staged&quot;)&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1953-08-12&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">50.07</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">78.43</span>
-    <span class="p">},{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;RDS-37&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">1600</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;USSR&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;RUS&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;First &quot;staged&quot; thermonuclear weapon test by the USSR (deployable)&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1955-11-22&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">50.07</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">78.43</span>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">mostObjects</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="kd">var</span> <span class="nx">fillColor</span> <span class="o">=</span> <span class="s2">&quot;#008100&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    <span class="p">},{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Tsar Bomba&#39;</span><span class="p">,</span>
-        <span class="nx">radius</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nx">yeild</span><span class="o">:</span> <span class="mi">50000</span><span class="p">,</span>
-        <span class="nx">country</span><span class="o">:</span> <span class="s1">&#39;USSR&#39;</span><span class="p">,</span>
-        <span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;RUS&#39;</span><span class="p">,</span>
-        <span class="nx">significance</span><span class="o">:</span> <span class="s1">&#39;Largest thermonuclear weapon ever tested—scaled down from its initial 100 Mt design by 50%&#39;</span><span class="p">,</span>
-        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;1961-10-31&#39;</span><span class="p">,</span>
-        <span class="nx">latitude</span><span class="o">:</span> <span class="mf">73.482</span><span class="p">,</span>
-        <span class="nx">longitude</span><span class="o">:</span> <span class="mf">54.5854</span>
+<span class="nx">rawCountries</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">currentISO</span> <span class="o">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">iso</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">stat</span> <span class="o">=</span> <span class="p">[</span><span class="nx">c</span><span class="p">.</span><span class="nx">statistic</span><span class="p">,</span><span class="s2">&quot; [&quot;</span><span class="p">,</span><span class="nx">c</span><span class="p">.</span><span class="nx">field</span><span class="p">,</span><span class="s2">&quot;] (&quot;</span><span class="p">,</span><span class="nx">c</span><span class="p">.</span><span class="nx">date</span><span class="p">,</span><span class="s2">&quot;)&quot;</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">mostObjects</span><span class="p">[</span><span class="nx">currentISO</span><span class="p">])</span> <span class="p">{</span>
+        <span class="nx">mostObjects</span><span class="p">[</span><span class="nx">currentISO</span><span class="p">].</span><span class="nx">statistics</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">stat</span><span class="p">);</span>
+        <span class="nx">count</span> <span class="o">=</span> <span class="nx">mostObjects</span><span class="p">[</span><span class="nx">currentISO</span><span class="p">].</span><span class="nx">count</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">count</span> <span class="o">&gt;</span> <span class="nx">max</span><span class="p">)</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">count</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">mostObjects</span><span class="p">[</span><span class="nx">currentISO</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">country</span><span class="o">:</span> <span class="nx">c</span><span class="p">.</span><span class="nx">country</span><span class="p">,</span>
+            <span class="nx">statistics</span><span class="o">:</span> <span class="p">[</span><span class="nx">stat</span><span class="p">],</span>
+            <span class="nx">count</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nx">fillKey</span><span class="o">:</span> <span class="nx">currentISO</span><span class="p">,</span>
+        <span class="p">};</span>
     <span class="p">}</span>
-<span class="p">];</span>
-
-<span class="nx">bubbleTemplate</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">popupTemplate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">geo</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="p">[</span>
-        <span class="s1">&#39;&lt;div class=&quot;hoverinfo&quot;&gt;&lt;strong&gt;&#39;</span><span class="p">,</span><span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span><span class="s1">&#39;&lt;/strong&gt;&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;&lt;br/&gt;Payload: &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">yeild</span><span class="p">,</span> <span class="s1">&#39; kilotons&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;&lt;br/&gt;Country: &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">country</span><span class="p">,</span>
-        <span class="s1">&#39;&lt;br/&gt;Date: &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">date</span><span class="p">,</span>
-        <span class="s1">&#39;&lt;br/&gt;Significance: &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">significance</span><span class="p">,</span>
-        <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-<span class="p">}};</span>
-
-<span class="kd">var</span> <span class="nx">yields</span> <span class="o">=</span> <span class="nx">bombs</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">bomb</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">bomb</span><span class="p">.</span><span class="nx">yeild</span><span class="p">;</span>
 <span class="p">});</span>
 
-<span class="kd">var</span> <span class="nx">min</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">yields</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">yields</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">colorFills</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">defaultFill</span><span class="o">:</span> <span class="s1">&#39;white&#39;</span>
+<span class="p">};</span>
 
-<span class="kd">var</span> <span class="nx">scale</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">pow</span><span class="p">()</span>
-<span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="nx">min</span><span class="p">,</span> <span class="nx">max</span><span class="p">])</span>
-<span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span> <span class="mi">49</span><span class="p">]);</span>
+<span class="kd">var</span> <span class="nx">fill</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">max</span><span class="p">])</span>
+<span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="nx">fillColor</span><span class="p">]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">max</span><span class="p">);</span>
 
-<span class="nx">bombs</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">bomb</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">bombs</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">radius</span> <span class="o">=</span> <span class="nx">scale</span><span class="p">(</span><span class="nx">bomb</span><span class="p">.</span><span class="nx">yeild</span><span class="p">);</span>
+<span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">mostObjects</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">iso</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">count</span> <span class="o">=</span> <span class="nx">mostObjects</span><span class="p">[</span><span class="nx">iso</span><span class="p">].</span><span class="nx">count</span><span class="p">;</span>
+    <span class="nx">colorFills</span><span class="p">[</span><span class="nx">iso</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">count</span><span class="p">);</span>
 <span class="p">});</span>
 
-<span class="kd">var</span> <span class="nx">bubbleMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datamap</span><span class="p">({</span>
-    <span class="nx">element</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;nuclear&quot;</span><span class="p">),</span>
-    <span class="nx">scope</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span><span class="p">,</span>
+<span class="kd">var</span> <span class="nx">most</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datamap</span><span class="p">({</span>
+    <span class="nx">element</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;most&quot;</span><span class="p">),</span>
+    <span class="nx">fills</span><span class="o">:</span> <span class="nx">colorFills</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">mostObjects</span><span class="p">,</span>
     <span class="nx">geographyConfig</span><span class="o">:</span> <span class="p">{</span>
-        <span class="nx">popupOnHover</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nx">highlightOnHover</span><span class="o">:</span> <span class="kc">false</span>
+        <span class="nx">popupTemplate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">geography</span><span class="p">,</span> <span class="nx">country</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="s1">&#39;&lt;div class=&quot;hoverinfo&quot;&gt;&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;strong&gt;&quot;</span><span class="p">,</span>
+                <span class="nx">country</span><span class="p">.</span><span class="nx">country</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;/strong&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot; (&quot;</span><span class="p">,</span>
+                <span class="nx">country</span><span class="p">.</span><span class="nx">count</span><span class="p">,</span>
+                <span class="s2">&quot;)&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
+                <span class="nx">country</span><span class="p">.</span><span class="nx">statistics</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
+            <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="nx">borderColor</span><span class="o">:</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span>
+        <span class="nx">highlightOnHover</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="nx">fills</span><span class="o">:</span> <span class="p">{</span>
-        <span class="s1">&#39;USA&#39;</span><span class="o">:</span> <span class="s1">&#39;#1f77b4&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;RUS&#39;</span><span class="o">:</span> <span class="s1">&#39;#9467bd&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;PRK&#39;</span><span class="o">:</span> <span class="s1">&#39;#ff7f0e&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;PRC&#39;</span><span class="o">:</span> <span class="s1">&#39;#2ca02c&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;IND&#39;</span><span class="o">:</span> <span class="s1">&#39;#e377c2&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;GBR&#39;</span><span class="o">:</span> <span class="s1">&#39;#8c564b&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;FRA&#39;</span><span class="o">:</span> <span class="s1">&#39;#d62728&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;PAK&#39;</span><span class="o">:</span> <span class="s1">&#39;#7f7f7f&#39;</span><span class="p">,</span>
-        <span class="nx">defaultFill</span><span class="o">:</span> <span class="s1">&#39;#E7C4AE&#39;</span>
-    <span class="p">},</span>
-    <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
-        <span class="s1">&#39;RUS&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;RUS&#39;</span><span class="p">},</span>
-        <span class="s1">&#39;PRK&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PRK&#39;</span><span class="p">},</span>
-        <span class="s1">&#39;CHN&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PRC&#39;</span><span class="p">},</span>
-        <span class="s1">&#39;IND&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;IND&#39;</span><span class="p">},</span>
-        <span class="s1">&#39;GBR&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;GBR&#39;</span><span class="p">},</span>
-        <span class="s1">&#39;FRA&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;FRA&#39;</span><span class="p">},</span>
-        <span class="s1">&#39;PAK&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;PAK&#39;</span><span class="p">},</span>
-        <span class="s1">&#39;USA&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">fillKey</span><span class="o">:</span> <span class="s1">&#39;USA&#39;</span><span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">});</span>
-
-<span class="nx">bubbleMap</span><span class="p">.</span><span class="nx">bubbles</span><span class="p">(</span><span class="nx">bombs</span><span class="p">,</span> <span class="nx">bubbleTemplate</span><span class="p">);</span></code></pre></div>
+<span class="p">});</span></code></pre></div>
 
 
   </div>
   <div class="colophon">
     <p>
-      <span id="pub-date">Published on 23 Aug 2015</span> <span class="separator">&bull;</span>
+      <span id="pub-date">Published on 25 Aug 2015</span> <span class="separator">&bull;</span>
       <span id="social">Find me on <a href="">Twitter</a>!</span>
     </p>
   </div>
