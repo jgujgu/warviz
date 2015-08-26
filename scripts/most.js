@@ -27,7 +27,6 @@ var colorFills = {
 var fill = d3.scale.linear()
 .domain([0, max])
 .range(["white", fillColor]);
-console.log(max);
 
 Object.keys(mostObjects).forEach(function(iso) {
     count = mostObjects[iso].count;
