@@ -1,10 +1,9 @@
 ---
 layout: post
-title:  "My First War Map"
+title:  "Bombs Away"
 cover:
 date:   2015-08-23 23:58:00
 categories: d3 nuclear bombs
-<!--custom_css: bomb.css-->
 custom_div_id: nuclear
 custom_js:
 - d3.min
@@ -12,7 +11,7 @@ custom_js:
 - datamap
 - nuclear
 ---
-I've been searching for inspiration for a series of D3 graphs I'd like to someday make that center upon one of my favorite subjects, war. I recently happened upon [markmarkoh's bl.ock](http://bl.ocks.org/markmarkoh/4255924), which shows notable nuclear explosions and attending information. I used native javascript instead of backbone/underscore, as I find this easier to reason about. Tsar Bomba was ridiculously big, so it's hard to effectively scale the other circles and still retain their hoverability. We observe North Korea racking up tests in recent years. [Wikipedia](https://en.wikipedia.org/wiki/Nuclear_weapons_testing#Milestone_nuclear_explosions)
+I've been searching for inspiration for a series of D3 graphs I'd like to someday make that center upon one of my favorite subjects, war. I recently happened upon [markmarkoh's bl.ock](http://bl.ocks.org/markmarkoh/4255924) (he is the maintainer of the wonderful [DataMaps](http://datamaps.github.io/) library), which shows notable nuclear explosions and attending information. I used native javascript instead of backbone/underscore, as I find this easier to reason about. Tsar Bomba was ridiculously big, so it's hard to effectively scale the other circles and still retain their hoverability. We observe North Korea racking up tests in recent years. [Wikipedia](https://en.wikipedia.org/wiki/Nuclear_weapons_testing#Milestone_nuclear_explosions)
 
 {% highlight js %}
 //required html
