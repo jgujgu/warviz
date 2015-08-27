@@ -60,7 +60,7 @@ var fill = d3.scale.sqrt()
 var vis = svg.selectAll('circle')
 .data(nodes);
 
-vis.enter().append('circle')
+var circle = vis.enter().append('circle')
 .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
 .attr('fill', function(d) { return fill(d.articledivspeakers); })
 .attr('r', function(d) { return d.r; })
