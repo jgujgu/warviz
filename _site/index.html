@@ -115,7 +115,80 @@
   </div>
 
   <div class="post">
-    <p>Who loves Wikipedia? Of course, I do. But I wanted to see roughly which language’s Wiki had the most love, proportionally to the number of speakers. Of course, there are a number of other metrics to go by, <a href="https://meta.wikimedia.org/wiki/List_of_Wikipedias#Notes">depth or number of active users</a> being notable, but, for simplicity, raw numbers will suffice. I ended up choosing a <em>Nationalencyklopedin</em>–a Swedish encyclopedia–dataset for native language usage numbers, due to its fullness of language statistics, available on <a href="https://en.wikipedia.org/wiki/List_of_languages_by_number_of_native_speakers#Nationalencyklopedin">this page</a>. I then used <a href="https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers#Ethnologue_.282013.2C_17th_edition.29">Ethnologue</a> numbers for English, French, German, Spanish, Persian, Mandarin, and Russian because the difference between total and native speakers was rather great. I believe even these rough statistics provide a telling story. The color intensity shows how a language proportionally compared to its peers in terms of number of articles divided by number of speakers.</p>
+    <p>Who loves Wikipedia? Of course, I do. But I wanted to see roughly which language’s Wiki had the most love, proportionally to the number of speakers. Of course, there are a number of metrics to go by, <a href="https://meta.wikimedia.org/wiki/List_of_Wikipedias#Notes">depth or number of active users</a> being notable, but, for simplicity, I used the raw number of articles. I ended up choosing a <em>Nationalencyklopedin</em>–a Swedish encyclopedia–dataset for native language usage numbers, due to its fullness of language statistics, available on <a href="https://en.wikipedia.org/wiki/List_of_languages_by_number_of_native_speakers#Nationalencyklopedin">this page</a>. I then used <a href="https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers#Ethnologue_.282013.2C_17th_edition.29">Ethnologue</a> numbers for English, French, German, Spanish, Persian, Mandarin, and Russian because the difference between total and native speakers was rather great. I believe even these rough statistics provide a telling story. The color intensity shows how a language proportionally compared to its peers in terms of number of articles divided by number of speakers. <a href="https://war.wikipedia.org/wiki/Syahan_nga_Pakli">Waray-Waray</a>, <a href="https://sv.wikipedia.org/wiki/Portal:Huvudsida">Swedish</a>, and <a href="https://nl.wikipedia.org/wiki/Hoofdpagina">Dutch</a> contributors come out on top. Do their contributors simply more often translate articles from English? Or do they draw from the other languages in their geographic vicinity? Only they know.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">pack</span> <span class="o">=</span> <span class="nx">rawWikis</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">diameter</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">svg</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;#love&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;svg&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="nx">diameter</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="nx">diameter</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">bubble</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">layout</span><span class="p">.</span><span class="nx">pack</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">size</span><span class="p">([</span><span class="nx">diameter</span><span class="p">,</span> <span class="nx">diameter</span><span class="p">])</span>
+<span class="p">.</span><span class="nx">value</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">articles</span><span class="p">;</span> <span class="p">})</span>
+<span class="c1">// .sort(function(a, b) {</span>
+<span class="c1">// 	return -(a.value - b.value)</span>
+<span class="c1">// })</span>
+<span class="p">.</span><span class="nx">padding</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">tip</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">tip</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="s1">&#39;d3-tip&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">offset</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">[</span>
+    <span class="s2">&quot;&lt;p&gt;&quot;</span><span class="p">,</span>
+    <span class="nx">d</span><span class="p">.</span><span class="nx">englishname</span><span class="p">,</span>
+    <span class="s2">&quot; (&quot;</span><span class="p">,</span>
+    <span class="nx">d</span><span class="p">.</span><span class="nx">nativename</span><span class="p">,</span>
+    <span class="s2">&quot;)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Articles: &quot;</span><span class="p">,</span>
+    <span class="nx">numberWithCommas</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">articles</span><span class="p">),</span>
+    <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Speakers: &quot;</span><span class="p">,</span>
+    <span class="nx">numberWithCommas</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">speakers</span><span class="p">),</span>
+    <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Quotient: &quot;</span><span class="p">,</span>
+    <span class="nx">d3</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">articledivspeakers</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+    <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Wiki Symbol: &quot;</span><span class="p">,</span>
+    <span class="nx">d</span><span class="p">.</span><span class="nx">wiki</span><span class="p">,</span>
+    <span class="s2">&quot;&lt;/p&gt;&quot;</span><span class="p">,</span>
+  <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">svg</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">tip</span><span class="p">);</span>
+
+<span class="c1">// generate data with calculated layout values</span>
+<span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="nx">bubble</span><span class="p">.</span><span class="nx">nodes</span><span class="p">(</span><span class="nx">pack</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">!</span><span class="nx">d</span><span class="p">.</span><span class="nx">children</span><span class="p">;</span> <span class="p">});</span> <span class="c1">// filter out the outer bubble</span>
+
+<span class="kd">var</span> <span class="nx">values</span> <span class="o">=</span> <span class="nx">pack</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">articledivspeakers</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">fillColor</span> <span class="o">=</span> <span class="s2">&quot;#008100&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">secondFillColor</span> <span class="o">=</span> <span class="s2">&quot;#bcffbc&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">fill</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">max</span><span class="p">])</span>
+<span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="nx">secondFillColor</span><span class="p">,</span> <span class="nx">fillColor</span><span class="p">]);</span>
+
+<span class="kd">var</span> <span class="nx">vis</span> <span class="o">=</span> <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s1">&#39;circle&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">nodes</span><span class="p">);</span>
+
+<span class="nx">vis</span><span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;circle&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;transform&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="s1">&#39;translate(&#39;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">;</span> <span class="p">})</span>
+<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">articledivspeakers</span><span class="p">);</span> <span class="p">})</span>
+<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">r</span><span class="p">;</span> <span class="p">})</span>
+<span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;mouseover&#39;</span><span class="p">,</span> <span class="nx">tip</span><span class="p">.</span><span class="nx">show</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;mouseout&#39;</span><span class="p">,</span> <span class="nx">tip</span><span class="p">.</span><span class="nx">hide</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">numberWithCommas</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\B(?=(\d{3})+(?!\d))/g</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
 
 
   </div>
