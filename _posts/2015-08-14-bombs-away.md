@@ -2,7 +2,7 @@
 layout: post
 title:  "Bombs Away"
 cover:
-date:   2015-08-23 23:58:00
+date:   2015-08-14 23:58:00
 categories: d3 nuclear bombs
 custom_div_id: nuclear
 custom_js:
