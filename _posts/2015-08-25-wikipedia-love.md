@@ -2,7 +2,7 @@
 layout: post
 title: "Wikipedia Love"
 cover:
-date:   2015-08-27 23:58:00
+date:   2015-08-25 23:58:00
 categories: d3 wikipedia love languages
 custom_div_id: love
 custom_css: tip

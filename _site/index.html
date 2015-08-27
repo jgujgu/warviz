@@ -37,16 +37,16 @@
           <ul class="posts-list">
             
               <li class="post-link">
-                <a class="post-title" href="/d3/wikipedia/love/languages/2015/08/27/wikipedia-love.html">
+                <a class="post-title" href="/d3/wikipedia/most/2015/08/27/the-most.html">
                   <span class="post-date">27 Aug 2015</span>
-                  Wikipedia Love
+                  The Most
                 </a>
               </li>
             
               <li class="post-link">
-                <a class="post-title" href="/d3/wikipedia/most/2015/08/25/the-most.html">
+                <a class="post-title" href="/d3/wikipedia/love/languages/2015/08/25/wikipedia-love.html">
                   <span class="post-date">25 Aug 2015</span>
-                  The Most
+                  Wikipedia Love
                 </a>
               </li>
             
@@ -93,102 +93,90 @@
     
 
     
-      <div id="love" style="height: 500px; width: 750px"></div>
+      <div id="most" style="height: 500px; width: 750px"></div>
     
 
     
       
         <script src='/scripts/d3.min.js' type="text/javascript"></script>
       
-        <script src='/scripts/d3-tip.js' type="text/javascript"></script>
+        <script src='/scripts/topojson.min.js' type="text/javascript"></script>
       
-        <script src='/scripts/rawwikis.js' type="text/javascript"></script>
+        <script src='/scripts/datamap.js' type="text/javascript"></script>
       
-        <script src='/scripts/love.js' type="text/javascript"></script>
+        <script src='/scripts/rawcountries.js' type="text/javascript"></script>
+      
+        <script src='/scripts/most.js' type="text/javascript"></script>
       
     
 
     <div id="info-container">
-      <h1 id="title">Wikipedia Love</h1>
+      <h1 id="title">The Most</h1>
       <span id="date">27 Aug 2015</span>
     </div>
   </div>
 
   <div class="post">
-    <p>Who loves Wikipedia? Of course, I do. But I wanted to see roughly which language’s Wiki had the most love, proportionally to the number of speakers. Of course, there are a number of metrics to go by, <a href="https://meta.wikimedia.org/wiki/List_of_Wikipedias#Notes">depth or number of active users</a> being notable, but, for simplicity, I used the raw number of articles. I ended up choosing a <em>Nationalencyklopedin</em>–a Swedish encyclopedia–dataset for native language usage numbers, due to its fullness of language statistics, available on <a href="https://en.wikipedia.org/wiki/List_of_languages_by_number_of_native_speakers#Nationalencyklopedin">this page</a>. I then used <a href="https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers#Ethnologue_.282013.2C_17th_edition.29">Ethnologue</a> numbers for English, French, German, Spanish, Persian, Mandarin, and Russian because the difference between total and native speakers was rather great. I believe even these rough statistics provide a telling story. The color intensity shows how a language proportionally compared to its peers in terms of number of articles divided by number of speakers. <a href="https://war.wikipedia.org/wiki/Syahan_nga_Pakli">Waray-Waray</a>, <a href="https://sv.wikipedia.org/wiki/Portal:Huvudsida">Swedish</a>, and <a href="https://nl.wikipedia.org/wiki/Hoofdpagina">Dutch</a> contributors come out on top. Do their contributors simply more often translate articles from English? Or do they draw from the other languages in their geographic vicinity? Only they know. At the bottom are <a href="https://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5">Mandarin</a> and <a href="https://ar.wikipedia.org/wiki/%D8%A7%D9%84%D8%B5%D9%81%D8%AD%D8%A9_%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9">Arabic</a>. The cynic in me cites the fact that the majority of native speakers of these languages live in countries with heavy censorship, but this is only a wild hypothesis.</p>
+    <p>I was on the hunt for a cool Wikipedia dataset I could make another informative map with, and I settled on this, a <a href="https://en.wikipedia.org/wiki/List_of_top_international_rankings_by_country">list of top international rankings by country</a>. The color intensities show how relatively many rankings a country had on the list, and hovering provides a list of all the ranking descriptions. Some curiosities: Venezuela makes beauty queens, and South Africa has lots of AIDS. No surprises: Afghanistan is a terrible place to be. Here is the raw country data in <a href="https://docs.google.com/spreadsheets/d/1SkP4xA0-qRK3YQQfkVg5kaMsZtRyhjL9qtOsMTo7SJ4/edit?usp=sharing">spreadsheet form</a>.</p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">pack</span> <span class="o">=</span> <span class="nx">rawWikis</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">diameter</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
-
-<span class="kd">var</span> <span class="nx">svg</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;#love&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;svg&#39;</span><span class="p">)</span>
-<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="nx">diameter</span><span class="p">)</span>
-<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="nx">diameter</span><span class="p">);</span>
-
-<span class="kd">var</span> <span class="nx">bubble</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">layout</span><span class="p">.</span><span class="nx">pack</span><span class="p">()</span>
-<span class="p">.</span><span class="nx">size</span><span class="p">([</span><span class="nx">diameter</span><span class="p">,</span> <span class="nx">diameter</span><span class="p">])</span>
-<span class="p">.</span><span class="nx">value</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">articles</span><span class="p">;</span> <span class="p">})</span>
-<span class="c1">// .sort(function(a, b) {</span>
-<span class="c1">// 	return -(a.value - b.value)</span>
-<span class="c1">// })</span>
-<span class="p">.</span><span class="nx">padding</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-
-<span class="kd">var</span> <span class="nx">tip</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">tip</span><span class="p">()</span>
-<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="s1">&#39;d3-tip&#39;</span><span class="p">)</span>
-<span class="p">.</span><span class="nx">offset</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">[</span>
-    <span class="s2">&quot;&lt;p&gt;&quot;</span><span class="p">,</span>
-    <span class="nx">d</span><span class="p">.</span><span class="nx">englishname</span><span class="p">,</span>
-    <span class="s2">&quot; (&quot;</span><span class="p">,</span>
-    <span class="nx">d</span><span class="p">.</span><span class="nx">nativename</span><span class="p">,</span>
-    <span class="s2">&quot;)&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Articles: &quot;</span><span class="p">,</span>
-    <span class="nx">numberWithCommas</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">articles</span><span class="p">),</span>
-    <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Speakers: &quot;</span><span class="p">,</span>
-    <span class="nx">numberWithCommas</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">speakers</span><span class="p">),</span>
-    <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Quotient: &quot;</span><span class="p">,</span>
-    <span class="nx">d3</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">articledivspeakers</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
-    <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Wiki Symbol: &quot;</span><span class="p">,</span>
-    <span class="nx">d</span><span class="p">.</span><span class="nx">wiki</span><span class="p">,</span>
-    <span class="s2">&quot;&lt;/p&gt;&quot;</span><span class="p">,</span>
-  <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
-<span class="p">});</span>
-
-<span class="nx">svg</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">tip</span><span class="p">);</span>
-
-<span class="c1">// generate data with calculated layout values</span>
-<span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="nx">bubble</span><span class="p">.</span><span class="nx">nodes</span><span class="p">(</span><span class="nx">pack</span><span class="p">)</span>
-<span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">!</span><span class="nx">d</span><span class="p">.</span><span class="nx">children</span><span class="p">;</span> <span class="p">});</span> <span class="c1">// filter out the outer bubble</span>
-
-<span class="kd">var</span> <span class="nx">values</span> <span class="o">=</span> <span class="nx">pack</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">articledivspeakers</span><span class="p">;</span>
-<span class="p">});</span>
-
-<span class="kd">var</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>
-
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">mostObjects</span> <span class="o">=</span> <span class="p">{};</span>
 <span class="kd">var</span> <span class="nx">fillColor</span> <span class="o">=</span> <span class="s2">&quot;#008100&quot;</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">secondFillColor</span> <span class="o">=</span> <span class="s2">&quot;#bcffbc&quot;</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">fill</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">()</span>
+<span class="kd">var</span> <span class="nx">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="nx">rawCountries</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">currentISO</span> <span class="o">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">iso</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">stat</span> <span class="o">=</span> <span class="p">[</span><span class="nx">c</span><span class="p">.</span><span class="nx">statistic</span><span class="p">,</span><span class="s2">&quot; [&quot;</span><span class="p">,</span><span class="nx">c</span><span class="p">.</span><span class="nx">field</span><span class="p">,</span><span class="s2">&quot;] (&quot;</span><span class="p">,</span><span class="nx">c</span><span class="p">.</span><span class="nx">date</span><span class="p">,</span><span class="s2">&quot;)&quot;</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">mostObjects</span><span class="p">[</span><span class="nx">currentISO</span><span class="p">])</span> <span class="p">{</span>
+        <span class="nx">mostObjects</span><span class="p">[</span><span class="nx">currentISO</span><span class="p">].</span><span class="nx">statistics</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">stat</span><span class="p">);</span>
+        <span class="nx">count</span> <span class="o">=</span> <span class="nx">mostObjects</span><span class="p">[</span><span class="nx">currentISO</span><span class="p">].</span><span class="nx">count</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">count</span> <span class="o">&gt;</span> <span class="nx">max</span><span class="p">)</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">count</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">mostObjects</span><span class="p">[</span><span class="nx">currentISO</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">country</span><span class="o">:</span> <span class="nx">c</span><span class="p">.</span><span class="nx">country</span><span class="p">,</span>
+            <span class="nx">statistics</span><span class="o">:</span> <span class="p">[</span><span class="nx">stat</span><span class="p">],</span>
+            <span class="nx">count</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nx">fillKey</span><span class="o">:</span> <span class="nx">currentISO</span><span class="p">,</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">colorFills</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">defaultFill</span><span class="o">:</span> <span class="s1">&#39;white&#39;</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">fill</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
 <span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">max</span><span class="p">])</span>
-<span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="nx">secondFillColor</span><span class="p">,</span> <span class="nx">fillColor</span><span class="p">]);</span>
+<span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="nx">fillColor</span><span class="p">]);</span>
 
-<span class="kd">var</span> <span class="nx">vis</span> <span class="o">=</span> <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s1">&#39;circle&#39;</span><span class="p">)</span>
-<span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">nodes</span><span class="p">);</span>
+<span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">mostObjects</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">iso</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">mostObjects</span><span class="p">[</span><span class="nx">iso</span><span class="p">].</span><span class="nx">count</span><span class="p">;</span>
+    <span class="nx">colorFills</span><span class="p">[</span><span class="nx">iso</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">count</span><span class="p">);</span>
+<span class="p">});</span>
 
-<span class="nx">vis</span><span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;circle&#39;</span><span class="p">)</span>
-<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;transform&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="s1">&#39;translate(&#39;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">;</span> <span class="p">})</span>
-<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">articledivspeakers</span><span class="p">);</span> <span class="p">})</span>
-<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">r</span><span class="p">;</span> <span class="p">})</span>
-<span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;mouseover&#39;</span><span class="p">,</span> <span class="nx">tip</span><span class="p">.</span><span class="nx">show</span><span class="p">)</span>
-<span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;mouseout&#39;</span><span class="p">,</span> <span class="nx">tip</span><span class="p">.</span><span class="nx">hide</span><span class="p">);</span>
-
-<span class="kd">function</span> <span class="nx">numberWithCommas</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">x</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\B(?=(\d{3})+(?!\d))/g</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+<span class="kd">var</span> <span class="nx">most</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Datamap</span><span class="p">({</span>
+    <span class="nx">element</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;most&quot;</span><span class="p">),</span>
+    <span class="nx">fills</span><span class="o">:</span> <span class="nx">colorFills</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">mostObjects</span><span class="p">,</span>
+    <span class="nx">geographyConfig</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">popupTemplate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">geography</span><span class="p">,</span> <span class="nx">country</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="s1">&#39;&lt;div class=&quot;hoverinfo&quot;&gt;&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;strong&gt;&quot;</span><span class="p">,</span>
+                <span class="nx">country</span><span class="p">.</span><span class="nx">country</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;/strong&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot; (&quot;</span><span class="p">,</span>
+                <span class="nx">country</span><span class="p">.</span><span class="nx">count</span><span class="p">,</span>
+                <span class="s2">&quot;)&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
+                <span class="nx">country</span><span class="p">.</span><span class="nx">statistics</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">,</span>
+            <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="nx">borderColor</span><span class="o">:</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span>
+        <span class="nx">highlightOnHover</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">});</span></code></pre></div>
 
 
   </div>
