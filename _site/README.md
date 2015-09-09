@@ -1,1 +1,1 @@
-JGu's blog, JGu[i]
+JGu's blog, bloGu
