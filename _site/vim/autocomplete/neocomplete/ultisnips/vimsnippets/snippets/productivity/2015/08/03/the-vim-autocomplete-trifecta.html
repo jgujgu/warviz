@@ -112,74 +112,74 @@
   <div class="post">
     <p>Setting up any text editor with snippets is a must for every developer, and, for those that use Vim, the case is no different. My minimum setup in Vim requires <a href="https://github.com/Shougo/neocomplete.vim">neocomplete</a>, <a href="https://github.com/SirVer/ultisnips">Ultisnips</a>, and <a href="https://github.com/honza/vim-snippets">vim-snippets</a>.</p>
 
-<p>Add these lines to your <code>.vimrc</code>. I use Vundle.</p>
+<p>Add these lines to your <code class="highlighter-rouge">.vimrc</code>. I use Vundle.</p>
 
-<div class="highlight"><pre><code class="language-vim" data-lang="vim"><span class="c">&quot;Vundle begin&quot;</span>
-Plugin <span class="s1">&#39;Shougo/neocomplete.vim&#39;</span>
-Plugin <span class="s1">&#39;SirVer/ultisnips&#39;</span>
-Plugin <span class="s1">&#39;honza/vim-snippets&#39;</span>
-<span class="c">&quot;Vundle end&quot;</span>
+<figure class="highlight"><pre><code class="language-vim" data-lang="vim"><span class="c">"Vundle begin"</span>
+Plugin <span class="s1">'Shougo/neocomplete.vim'</span>
+Plugin <span class="s1">'SirVer/ultisnips'</span>
+Plugin <span class="s1">'honza/vim-snippets'</span>
+<span class="c">"Vundle end"</span>
 
-<span class="c">&quot;neocomplete settings</span>
-<span class="k">let</span> <span class="k">g</span>:neocomplete#enable_at_startup <span class="p">=</span> <span class="m">1</span>
-<span class="k">set</span> <span class="nb">wildmode</span><span class="p">=</span><span class="nb">list</span>:longest
-<span class="k">set</span> <span class="nb">wildignore</span><span class="p">=</span>*.<span class="k">o</span><span class="p">,</span>*.obj<span class="p">,</span>*<span class="p">~</span>
-<span class="k">set</span> <span class="nb">wildignore</span><span class="p">+=</span>*<span class="k">vim</span>/backups*
-<span class="k">set</span> <span class="nb">wildignore</span><span class="p">+=</span>*sass<span class="p">-</span>cache*
-<span class="k">set</span> <span class="nb">wildignore</span><span class="p">+=</span>*DS_Store*
-<span class="k">set</span> <span class="nb">wildignore</span><span class="p">+=</span>*.gem
-<span class="k">set</span> <span class="nb">wildignore</span><span class="p">+=</span>log/**
-<span class="k">set</span> <span class="nb">wildignore</span><span class="p">+=</span>node_modules/**
-<span class="k">set</span> <span class="nb">wildignore</span><span class="p">+=</span>tmp/**
-<span class="c">&quot; Use smartcase.</span>
-<span class="k">let</span> <span class="k">g</span>:neocomplete#enable_smart_case <span class="p">=</span> <span class="m">1</span>
-<span class="c">&quot; Set minimum syntax keyword length.</span>
-<span class="k">let</span> <span class="k">g</span>:neocomplete#sources#<span class="nb">syntax</span>#min_keyword_length <span class="p">=</span> <span class="m">3</span>
-<span class="k">let</span> <span class="k">g</span>:neocomplete#lock_buffer_name_pattern <span class="p">=</span> <span class="s1">&#39;\*ku\*&#39;</span>
+<span class="c">"neocomplete settings</span>
+<span class="k">let</span> <span class="nv">g:neocomplete</span>#enable_at_startup <span class="p">=</span> <span class="m">1</span>
+<span class="k">set</span> wildmode<span class="p">=</span>list<span class="p">:</span>longest
+<span class="k">set</span> wildignore<span class="p">=</span>*<span class="p">.</span><span class="k">o</span><span class="p">,</span>*<span class="p">.</span>obj<span class="p">,</span>*<span class="p">~</span>
+<span class="k">set</span> wildignore<span class="p">+=</span>*<span class="k">vim</span>/backups*
+<span class="k">set</span> wildignore<span class="p">+=</span>*sass<span class="p">-</span>cache*
+<span class="k">set</span> wildignore<span class="p">+=</span>*DS_Store*
+<span class="k">set</span> wildignore<span class="p">+=</span>*<span class="p">.</span>gem
+<span class="k">set</span> wildignore<span class="p">+=</span>log/**
+<span class="k">set</span> wildignore<span class="p">+=</span>node_modules/**
+<span class="k">set</span> wildignore<span class="p">+=</span>tmp/**
+<span class="c">" Use smartcase.</span>
+<span class="k">let</span> <span class="nv">g:neocomplete</span>#enable_smart_case <span class="p">=</span> <span class="m">1</span>
+<span class="c">" Set minimum syntax keyword length.</span>
+<span class="k">let</span> <span class="nv">g:neocomplete</span>#sources#syntax#min_keyword_length <span class="p">=</span> <span class="m">3</span>
+<span class="k">let</span> <span class="nv">g:neocomplete</span>#lock_buffer_name_pattern <span class="p">=</span> <span class="s1">'\*ku\*'</span>
 
-<span class="c">&quot;Ultisnips settings</span>
-<span class="k">let</span> <span class="k">g</span>:UltiSnipsExpandTrigger<span class="p">=</span><span class="s2">&quot;&lt;TAB&gt;&quot;</span>
-<span class="k">let</span> <span class="k">g</span>:UltiSnipsListSnippets<span class="p">=</span><span class="s2">&quot;&lt;c-TAB&gt;&quot;</span>
-<span class="k">let</span> <span class="k">g</span>:UltiSnipsJumpForwardTrigger<span class="p">=</span><span class="s2">&quot;&lt;c-j&gt;&quot;</span>
-<span class="k">let</span> <span class="k">g</span>:UltiSnipsJumpBackwardTrigger<span class="p">=</span><span class="s2">&quot;&lt;c-k&gt;&quot;</span></code></pre></div>
+<span class="c">"Ultisnips settings</span>
+<span class="k">let</span> <span class="nv">g:UltiSnipsExpandTrigger</span><span class="p">=</span><span class="s2">"&lt;TAB&gt;"</span>
+<span class="k">let</span> <span class="nv">g:UltiSnipsListSnippets</span><span class="p">=</span><span class="s2">"&lt;c-TAB&gt;"</span>
+<span class="k">let</span> <span class="nv">g:UltiSnipsJumpForwardTrigger</span><span class="p">=</span><span class="s2">"&lt;c-j&gt;"</span>
+<span class="k">let</span> <span class="nv">g:UltiSnipsJumpBackwardTrigger</span><span class="p">=</span><span class="s2">"&lt;c-k&gt;"</span></code></pre></figure>
 
 <p>Next, on OSX, since it comes with Vim 7.3, you will have to upgrade to Vim 7.4 with lua (because of neocomplete). First, move the system Vim to another folder:</p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="err">❯❯❯</span> <span class="nx">mv</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">vim</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">vim73</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="err">❯❯❯</span> <span class="nx">mv</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">vim</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">vim73</span></code></pre></figure>
 
 <p>Now, install the new vim:</p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="err">❯❯❯</span> <span class="nx">brew</span> <span class="nx">install</span> <span class="nx">vim</span> <span class="o">--</span><span class="kd">with</span><span class="o">-</span><span class="nx">lua</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="err">❯❯❯</span> <span class="nx">brew</span> <span class="nx">install</span> <span class="nx">vim</span> <span class="o">--</span><span class="kd">with</span><span class="o">-</span><span class="nx">lua</span></code></pre></figure>
 
-<p>Finally, since homebrew will probably have not installed Vim into old <code>usr/bin</code> directory, copy the homebrew vim into the <code>usr/bin</code> directory:</p>
+<p>Finally, since homebrew will probably have not installed Vim into old <code class="highlighter-rouge">usr/bin</code> directory, copy the homebrew vim into the <code class="highlighter-rouge">usr/bin</code> directory:</p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="err">❯❯❯</span> <span class="nx">cp</span> <span class="nx">usr</span><span class="o">/</span><span class="nx">local</span><span class="o">/</span><span class="nx">Cellar</span><span class="o">/</span><span class="nx">vim</span><span class="o">/</span><span class="mf">7.4</span><span class="p">.</span><span class="nx">xxx</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">vim</span> <span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="err">❯❯❯</span> <span class="nx">cp</span> <span class="nx">usr</span><span class="o">/</span><span class="nx">local</span><span class="o">/</span><span class="nx">Cellar</span><span class="o">/</span><span class="nx">vim</span><span class="o">/</span><span class="mf">7.4</span><span class="p">.</span><span class="nx">xxx</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">vim</span> <span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span></code></pre></figure>
 
-<p>All of this sets up the minimum settings to use neocomplete and Ultisnips in concert. <code>CTRL-n</code> cycles through neocomplete options and <code>TAB</code> expands them. <code>CTRL-j</code> and <code>CTRL-k</code> will cycle through the fields of an Ultisnips snippet, requiring <code>TAB</code>, of course, to first expand it. These are the only commands I commonly use.</p>
+<p>All of this sets up the minimum settings to use neocomplete and Ultisnips in concert. <code class="highlighter-rouge">CTRL-n</code> cycles through neocomplete options and <code class="highlighter-rouge">TAB</code> expands them. <code class="highlighter-rouge">CTRL-j</code> and <code class="highlighter-rouge">CTRL-k</code> will cycle through the fields of an Ultisnips snippet, requiring <code class="highlighter-rouge">TAB</code>, of course, to first expand it. These are the only commands I commonly use.</p>
 
-<p>As an example, in any JavaScript file, I will only type <code>fun + TAB</code> (while in insert mode) and end up with the following expansion:</p>
+<p>As an example, in any JavaScript file, I will only type <code class="highlighter-rouge">fun + TAB</code> (while in insert mode) and end up with the following expansion:</p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">function_name</span><span class="p">(</span><span class="nx">argument</span><span class="p">)</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">function_name</span><span class="p">(</span><span class="nx">argument</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">body</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
-<p>Using <code>CTRL-j</code>, I will jump from <code>function_name</code>, <code>argument</code>, and finally the blank <code>body</code>, foregoing the need to type any parentheses, braces, or tabs.</p>
+<p>Using <code class="highlighter-rouge">CTRL-j</code>, I will jump from <code class="highlighter-rouge">function_name</code>, <code class="highlighter-rouge">argument</code>, and finally the blank <code class="highlighter-rouge">body</code>, foregoing the need to type any parentheses, braces, or tabs.</p>
 
 <p>It is here I’d like to address the concern of typing not being the bottleneck for writing code. <strong>I totally agree it is not the bottleneck.</strong> It addresses another problem. Snippets significantly reduce the annoyance of having to type out syntax, which interrupts my thinking, especially if I have to sift through a mess of incorrectly completed braces and parentheses (which I generally don’t have to do anymore). A streamlined snippet setup prevents that wasted time, such that more time can be spent on the more interesting parts of programming.</p>
 
 <p>Finally, vim-snippets provides many great default snippets, but let’s say you want to make new snippets or just see which ones come default. Go into the following directory to see the different snippet files in your favorite languages:</p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="err">❯❯❯</span> <span class="nx">cd</span> <span class="o">~</span><span class="err">/.vim/bundle/vim-snippets/UltiSnips</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="err">❯❯❯</span> <span class="nx">cd</span> <span class="o">~</span><span class="sr">/.vim/</span><span class="nx">bundle</span><span class="o">/</span><span class="nx">vim</span><span class="o">-</span><span class="nx">snippets</span><span class="o">/</span><span class="nx">UltiSnips</span></code></pre></figure>
 
-<p>I often use RSpec expectation syntax in testing, but loathe writing out the syntax itself. In my <code>ruby.snippets</code> file, I have added the following:</p>
+<p>I often use RSpec expectation syntax in testing, but loathe writing out the syntax itself. In my <code class="highlighter-rouge">ruby.snippets</code> file, I have added the following:</p>
 
-<div class="highlight"><pre><code class="language-sh" data-lang="sh">snippet ex <span class="s2">&quot;expectation&quot;</span>
-expect<span class="o">(</span><span class="k">${</span><span class="nv">1</span><span class="p">:</span><span class="nv">object</span><span class="k">}</span><span class="o">)</span>.<span class="k">${</span><span class="nv">2</span><span class="p">:</span><span class="nv">to</span><span class="k">}</span> <span class="k">${</span><span class="nv">3</span><span class="p">:</span><span class="nv">method</span><span class="k">}</span><span class="o">(</span><span class="k">${</span><span class="nv">4</span><span class="p">:</span><span class="nv">expectation</span><span class="k">}</span><span class="o">)</span>
-endsnippet</code></pre></div>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh">snippet ex <span class="s2">"expectation"</span>
+expect<span class="o">(</span><span class="k">${</span><span class="nv">1</span>:object<span class="k">}</span><span class="o">)</span>.<span class="k">${</span><span class="nv">2</span>:to<span class="k">}</span> <span class="k">${</span><span class="nv">3</span>:method<span class="k">}</span><span class="o">(</span><span class="k">${</span><span class="nv">4</span>:expectation<span class="k">}</span><span class="o">)</span>
+endsnippet</code></pre></figure>
 
-<p>This snippet allows me to simply type <code>ex + TAB</code> and <code>CTRL-j</code> through the following:</p>
+<p>This snippet allows me to simply type <code class="highlighter-rouge">ex + TAB</code> and <code class="highlighter-rouge">CTRL-j</code> through the following:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">expect</span><span class="p">(</span><span class="n">object</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="nb">method</span><span class="p">(</span><span class="n">expectation</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">expect</span><span class="p">(</span><span class="n">object</span><span class="p">).</span><span class="nf">to</span> <span class="nb">method</span><span class="p">(</span><span class="n">expectation</span><span class="p">)</span></code></pre></figure>
 
 <p>As unproblematic as Ruby syntax is, this still saves me the hassle of typing out syntax I do not care about.</p>
 
